@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "71336918736",
+    "firebase_url": "https://super-chat-spo.firebaseio.com",
+    "project_id": "super-chat-spo",
+    "storage_bucket": "super-chat-spo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71336918736:android:2754086cf6d5e44cede8d5",
+        "android_client_info": {
+          "package_name": "com.super_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "71336918736-i47bkfcu8q4aqt8qhcsg1up559jgeb3f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDQJffuPCYHkG_zW6j4G2kD3KZ1fJTEQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71336918736-i47bkfcu8q4aqt8qhcsg1up559jgeb3f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
