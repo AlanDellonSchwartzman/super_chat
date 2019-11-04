@@ -18,13 +18,13 @@ export default class Chat extends Component {
     };
 
     this.user = firebase().currentUser;
-    console.log("User:" + this.user.uid);
+    console.log("User: " + this.user.uid);
     
     const { params } = this.props.navigation.state;
-    uid = firebase().currentUser.uid;
-    name = firebase().currentUser.name;
-    email = firebase().currentUser.email;
-    console.log("User:" + uid);
+    uid = params.uid;
+    name = params.name;
+    email = params.email;
+    console.log("User: " + uid);
 
     this.chatRef = this.getRef().child("chat/" + this.generateChatId());
     this.chatRefData = this.chatRef.orderByChild("order");

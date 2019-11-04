@@ -25,16 +25,17 @@ export default class Register extends Component {
       password: "",
       password_confirmation: "",
     };
+
     firebase().onAuthStateChanged(user => {
       if (user) {
         this.getRef()
-          .child("friednds")
+          .child("friends")
           .push({
             email: user.email,
             uid: user.uid,
             name: this.state.name
           });
-        this.props.navigation.navigate("Chat");
+        this.props.navigation.navigate("Main");
       }
     });
   }
@@ -69,7 +70,7 @@ export default class Register extends Component {
     /*await AsyncStorage.setItem("email", email);
     await AsyncStorage.setItem("name", name);
     await AsyncStorage.setItem("password", password);*/
-    this.props.navigation.navigate('Chat');
+    this.props.navigation.navigate('Main');
   }
 
   render() {
@@ -157,12 +158,21 @@ const styles = StyleSheet.create({
     height: 150
   },
   input: {
-    height: 40,
+    /*height: 40,
     width: 350,
     marginBottom: 10,
     backgroundColor: "white",
-    color: "#fff",
-    paddingHorizontal: 10
+    paddingHorizontal: 10*/
+
+    width: 350,
+		margin: 15,
+		paddingHorizontal: 15,
+		borderColor: '#900C3F',
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: "#ffffff",
+		fontSize: 15
+
   },
   button: {
     /*height: 50,

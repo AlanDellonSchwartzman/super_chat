@@ -45,7 +45,7 @@ export default class Main extends Component {
             style={styles.buttonStyle}
             onPress={() => this.props.navigation.navigate("Friendlist")}
           >
-            Friend List
+            Lista de Amigos
           </Text>
         </TouchableOpacity>
 
@@ -54,7 +54,6 @@ export default class Main extends Component {
           title="Sair"
           //style={styles.rightButton}
           onPress={() => {
-
             firebase
               .auth()
               .signOut()

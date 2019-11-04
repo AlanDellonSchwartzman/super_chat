@@ -7,13 +7,15 @@ import {
   Image,
   Button,
   StatusBar,
+  FlatList,
+  RefreshControl,
   TextInput
 } from "react-native";
  
-//import {ListView} from 'depra'
 import firebase from "@react-native-firebase/app";
 
 var name, uid, email;
+var items = [];
 
 export default class FriendsList extends Component {
   state = {
@@ -21,15 +23,20 @@ export default class FriendsList extends Component {
     uid: null,
     email: ""
   };
+
+  
+
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: new ListView.DataSource({
+      /*dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2
-      }),
-      loading: true
+      }),*/
+      refreshing: true,
+      
     };
     this.friendsRef = this.getRef().child("friends");
+
   }
 
   getRef() {
@@ -38,35 +45,41 @@ export default class FriendsList extends Component {
 
   listenForItems(friendsRef) {
     var user = firebase.auth().currentUser;
-
+    
     friendsRef.on("value", snap => {
       // get children as an array
-      var items = [];
+      items = [];
       snap.forEach(child => {
-        if (child.val().email != user.email)
+        if (child.val().email != firebase.auth().currentUser.email)
           items.push({
             name: child.val().name,
             uid: child.val().uid,
             email: child.val().email
           });
       });
-
+      
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(items),
-        loading: false
+        refreshing: false
       });
     });
+
+    friendsRef.off('value', this.listenForItems);
   }
 
   componentDidMount() {
     this.listenForItems(this.friendsRef);
   }
 
+  renderRefreshControl() {
+    this.setState({ refreshing: true });
+    this.listenForItems(this.friendsRef);
+  }
+
   static navigationOptions = {
     headerStyle: {
-      tilte: 'friends',
-      backgroundColor: "#16a085",
-      headerTintStyle: { color: 'green' },
+      title: 'friends',
+      backgroundColor: "#FF8764",
+      headerTitleStyle: { color: 'white' },
       elevation: null
     },
     headerRight: (
@@ -106,12 +119,6 @@ export default class FriendsList extends Component {
       >
         <View style={styles.profileContainer}>
           <StatusBar barStyle="light-content" backgroundColor="#FF8764" />
-          <Image
-            source={{
-              uri: "https://www.gravatar.com/avatar/"
-            }}
-            style={styles.profileImage}
-          />
           <Text style={styles.profileName}>{rowData.name}</Text>
         </View>
       </TouchableOpacity>
@@ -122,11 +129,20 @@ export default class FriendsList extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.topGroup}>
-          <Text style={styles.myFriends}>My Friends</Text>
+          <Text style={styles.myFriends}>Meus amigos</Text>
         </View>
-        <ListView
+        {/*<ListView
           dataSource={this.state.dataSource}
           renderRow={this.renderRow}
+        />*/}
+
+        <FlatList
+          data={items}
+          renderItem={({item: friend}) => this.renderRow(friend)}
+          keyExtractor={(item, index) => item.id}
+          onRefresh={() => this.renderRefreshControl()}
+          refreshing={this.state.refreshing}
+          initialNumToRender={5}
         />
       </View>
     );
@@ -152,7 +168,7 @@ const styles = StyleSheet.create({
   myFriends: {
     flex: 1,
     color: "#3A5BB1",
-    tintColor: "#fff",
+    //tintColor: "#fff",
     //secondaryColor: '#E9E9E9',
     //grayColor: '#A5A5A5',
     fontSize: 16,
