@@ -31,9 +31,6 @@ export default class Chat extends Component {
     this.onSend = this.onSend.bind(this);
   }
 
-  //generate ChatId works cause when you are the user sending chat you take user.uid and your friend takes uid
-  // when your friend is using the app to send message s/he takes user.uid and you take the uid cause you are the friend 
-
   generateChatId() {
     if (this.user.uid > uid) return `${this.user.uid}-${uid}`;
     else return `${uid}-${this.user.uid}`;
@@ -45,7 +42,6 @@ export default class Chat extends Component {
 
   listenForItems(chatRef) {
     chatRef.on("value", snap => {
-      // get children as an array
       var items = [];
       snap.forEach(child => {
         items.push({
@@ -74,9 +70,6 @@ export default class Chat extends Component {
   }
 
   onSend(messages = []) {
-    // this.setState({
-    //     messages: GiftedChat.append(this.state.messages, messages),
-    // });
     messages.forEach(message => {
       var now = new Date().getTime();
       this.chatRef.push({
@@ -88,6 +81,7 @@ export default class Chat extends Component {
       });
     });
   }
+
   render() {
     return (
       

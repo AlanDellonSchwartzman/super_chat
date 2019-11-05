@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   Button,
   StatusBar,
   FlatList,
@@ -23,15 +22,10 @@ export default class FriendsList extends Component {
     uid: null,
     email: ""
   };
-
   
-
   constructor(props) {
     super(props);
     this.state = {
-      /*dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2
-      }),*/
       refreshing: true,
       
     };
@@ -75,32 +69,35 @@ export default class FriendsList extends Component {
     this.listenForItems(this.friendsRef);
   }
 
+  goLogin() {
+    this.props.navigation.navigate('Login');
+  }
+
   static navigationOptions = {
     headerStyle: {
       title: 'friends',
       backgroundColor: "#FF8764",
-      headerTitleStyle: { color: 'white' },
       elevation: null
     },
-    headerRight: (
-      <Button
-        primary
-        title="Sair"
+    headerTitleStyle: { color: 'white' },
+    /*headerRight: (
+      <View 
+      style = {
+        margin = 5,
+        padding = 10,
+        borderColor = '#111111'
+      }>
+        <Button 
+        title = 'Sair'
+        color = '#FF512C'
         onPress={() => {
           firebase
             .auth()
-            .signOut()
-            .then(
-              () => {
-                this.props.navigation.navigate("Login");
-              },
-              function(error) {
-                // An error happened.
-              }
-            );
+            .signOut();
         }}
-      />
-    )
+        />
+      </View>
+      ),*/
   };
 
   renderRow = rowData => {
@@ -131,15 +128,11 @@ export default class FriendsList extends Component {
         <View style={styles.topGroup}>
           <Text style={styles.myFriends}>Meus amigos</Text>
         </View>
-        {/*<ListView
-          dataSource={this.state.dataSource}
-          renderRow={this.renderRow}
-        />*/}
 
         <FlatList
           data={items}
           renderItem={({item: friend}) => this.renderRow(friend)}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item, index) => item.uid}
           onRefresh={() => this.renderRefreshControl()}
           refreshing={this.state.refreshing}
           initialNumToRender={5}
@@ -168,9 +161,6 @@ const styles = StyleSheet.create({
   myFriends: {
     flex: 1,
     color: "#3A5BB1",
-    //tintColor: "#fff",
-    //secondaryColor: '#E9E9E9',
-    //grayColor: '#A5A5A5',
     fontSize: 16,
     padding: 5
   },

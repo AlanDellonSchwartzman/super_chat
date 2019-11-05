@@ -6,8 +6,8 @@ import {
     View, 
     StatusBar, 
     Button, 
-    Image, 
-    TouchableOpacity } from 'react-native';
+    Image 
+    } from 'react-native';
 import auth from '@react-native-firebase/auth';
 
 export default class Login extends React.Component {
@@ -26,27 +26,40 @@ export default class Login extends React.Component {
     static navigationOptions = {
         headerStyle: {
           title: 'Login',
-          headerTitleStyle: { color: 'white' },
           backgroundColor: "#FF8764",
           elevation: null
         },
+        headerTitleStyle: { color: 'white' },
         header: null
       };
     
     onPressLogin = async () => {
-        try {
-           const user =  await auth().signInWithEmailAndPassword(this.state.email, this.state.password);
+        if (this.state.email == null || this.state.password == null){
+            try {
+            const user =  await auth().signInWithEmailAndPassword(this.state.email, this.state.password);
 
-           auth().onAuthStateChanged(user => {
-                if (user) {
-                    this.props.navigation.navigate('Main');
+            auth().onAuthStateChanged(user => {
+                    if (user) {
+                        this.props.navigation.navigate('Main');
+                    }
+                });
+
+            console.log(user);
+            } catch (e) {
+
+                if (e.message.includes("user-not-found")){
+                    alert("Usuário não cadastrado. \nCadastre-se agora!")
+                    this.props.navigation.navigate('Register');
                 }
-            });
-
-           console.log(user);
-          } catch (e) {
-            console.error(e.message);
-          }
+                else if (e.message.includes("invalid-email")){
+                    alert("Digite um e-mail válido!")
+                }
+                else if (e.message.includes("wrong-password")){
+                    alert("Senha inválida. Tente novamente!")
+                }
+                else console.error(e.message);
+            }
+        } else (alert("Informe um e-mail e senha para login ou cadastre-se agora!"))
 
     };
 
@@ -71,7 +84,8 @@ export default class Login extends React.Component {
                 placeholder='Digite seu e-mail'
                 onChangeText={this.onChangeTextEmail}
                 value={this.state.email}
-                returnKeyType="next"
+                returnKeyType={"next"}
+                onSubmitEditing={() => this.passwordInput.focus()}
             />
             <Text style={styles.label}>Senha</Text>
             <TextInput
@@ -80,6 +94,7 @@ export default class Login extends React.Component {
                 onChangeText={this.onChangeTextPassword}
                 value={this.state.password}
                 secureTextEntry={true}
+                ref = {input => {(this.passwordInput = input)}}
                 returnKeyType="go"
             />
 
@@ -98,8 +113,6 @@ export default class Login extends React.Component {
                     onPress={this.onPressRegister}
                 />
             </View>
-
-            { this.state.isAuthenticated ? <Text>Logado com sucesso</Text> : null }
 
         </View>
     )

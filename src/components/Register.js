@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   TextInput,
   StatusBar,
-  TouchableHighlight,
   Button,
   Image,
   KeyboardAvoidingView,
-  AsyncStorage
+
 } from "react-native";
 
 import firebase from '@react-native-firebase/auth';
@@ -47,9 +45,9 @@ export default class Register extends Component {
   static navigationOptions = {
     headerStyle: {
       title:'Cadastro',
-      headerTitleStyle: { color: 'white' },
       backgroundColor: "#FF8764",
-      elevation: null
+      elevation: null,
+      headerTitleStyle: { color: 'white' }
     }
   };
 
@@ -60,17 +58,26 @@ export default class Register extends Component {
     console.log(password);
 
     try {
+      const user = await firebase().createUserWithEmailAndPassword(email, password);
+      firebase().currentUser.updateProfile({
+        displayName: name,
+     });
 
-        firebase().createUserWithEmailAndPassword(email, password)
+      firebase().onAuthStateChanged(user => {
+        if (user) {
+            this.props.navigation.navigate('Main');
+        }
+      });
 
     } catch (e) {
-        console.error(e.message);
-    }
-
-    /*await AsyncStorage.setItem("email", email);
-    await AsyncStorage.setItem("name", name);
-    await AsyncStorage.setItem("password", password);*/
-    this.props.navigation.navigate('Main');
+      if (e.message.includes("invalid-email")){
+        alert("Digite um e-mail válido!")
+      }
+      else if (e.message.includes("email-already-in-use")){
+        alert("E-mail já está em uso!")
+      }
+      else console.error(e.message);
+    }    
   }
 
   render() {
@@ -158,37 +165,21 @@ const styles = StyleSheet.create({
     height: 150
   },
   input: {
-    /*height: 40,
     width: 350,
-    marginBottom: 10,
-    backgroundColor: "white",
-    paddingHorizontal: 10*/
-
-    width: 350,
-		margin: 15,
+		marginBottom: 15,
 		paddingHorizontal: 15,
 		borderColor: '#900C3F',
     borderWidth: 1,
     borderRadius: 5,
     backgroundColor: "#ffffff",
 		fontSize: 15
-
   },
   button: {
-    /*height: 50,
-    backgroundColor: "#FF512C",
-    alignSelf: "stretch",
-    marginTop: 10,
-    justifyContent: "center",
-    paddingVertical: 15,
-    marginBottom: 10*/
-
     marginTop: 5,
     marginBottom: 5,
     padding: 10,
     borderColor: '#111111',
     width: '40%'
-
   },
   buttonText: {
     fontSize: 18,
@@ -212,5 +203,3 @@ const styles = StyleSheet.create({
     textAlign: "center"
   }
 });
-
-//AppRegistry.registerComponent("Register", () => Register);

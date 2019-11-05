@@ -16,29 +16,25 @@ export default class Main extends Component {
   state = {
     name: ""
   };
+
   static navigationOptions = {
     headerStyle: {
       tiltle: 'Menu',
-      headerTitleStyle: { color: 'white' },
       backgroundColor: "#FF8764"
     },
-    headerLeft: null
+    headerLeft: null,
+    headerTitleStyle: { color: 'white' }
   };
+  
+  
   render() {
     return (
       <View style={styles.containerl}>
         <StatusBar barStyle="light-content" backgroundColor="#FF8764" />
-        <Text style={styles.title}>Digite seu nome:</Text>
-        <TextInput
-          style={styles.nameInput}
-          placeholder={this.state.name}
-          onChangeText={text => {
-            this.setState({
-              name: text
-            });
-          }}
-          value={this.state.name}
-        />
+        <Text style={styles.wellcome} >
+          <Text style={styles.title}>Bem vindo! </Text> 
+          <Text style = {styles.nameUser} >{firebase.auth().currentUser.displayName} </Text>
+        </Text>
 
         <TouchableOpacity>
           <Text
@@ -49,26 +45,26 @@ export default class Main extends Component {
           </Text>
         </TouchableOpacity>
 
-        <Button
-          primary
-          title="Sair"
-          //style={styles.rightButton}
-          onPress={() => {
-            firebase
-              .auth()
-              .signOut()
-              .then(
-                () => {
-                  this.props.navigation.navigate("Login");
-                },
-                function(error) {
-                  // An error happened.
-                }
-              );
-          }}
-        >
-          Log out
-        </Button>
+        <View style= {styles.btn}>
+          <Button
+            primary
+            title="Sair"
+            color = '#FF512C'
+            onPress={() => {
+              firebase
+                .auth()
+                .signOut()
+                .then(
+                  () => {
+                    this.props.navigation.navigate("Login");
+                  },
+                  function(error) {
+                    
+                  }
+                );
+            }}
+          />
+        </View>
       </View>
     );
   }
@@ -77,8 +73,18 @@ export default class Main extends Component {
 var styles = StyleSheet.create({
   title: {
     marginLeft: 20,
-    marginTop: 20,
     fontSize: 20
+  },
+  nameUser: {
+    marginLeft: 20,
+    marginTop: 20,
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  wellcome: {
+    marginTop: 25,
+    marginLeft: 15,
+    flexDirection: 'row'
   },
   nameInput: {
     height: 40,
@@ -87,11 +93,18 @@ var styles = StyleSheet.create({
     margin: 20
   },
   buttonStyle: {
-    marginLeft: 20,
-    margin: 20
+    color: "blue",
+    padding: 5,
+    margin: 10
   },
   containerl: {
     flex: 1
+  },
+  btn: {
+    marginTop: 5,
+    marginBottom: 5,
+    padding: 10,
+    borderColor: '#111111'
   }
 });
 
