@@ -61,7 +61,7 @@ export default class Register extends Component {
       const user = await firebase().createUserWithEmailAndPassword(email, password);
       firebase().currentUser.updateProfile({
         displayName: name,
-     });
+      });
 
       firebase().onAuthStateChanged(user => {
         if (user) {

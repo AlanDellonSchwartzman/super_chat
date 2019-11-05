@@ -34,7 +34,8 @@ export default class Login extends React.Component {
       };
     
     onPressLogin = async () => {
-        if (this.state.email == null || this.state.password == null){
+
+        if (this.state.email != "" && this.state.password != ""){
             try {
             const user =  await auth().signInWithEmailAndPassword(this.state.email, this.state.password);
 
