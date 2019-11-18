@@ -7,7 +7,7 @@ import Main from './src/components/Main';
 import Friendlist from "./src/components/Friendlist";
 
 import React, { Component } from "react";
-import { Platform, StyleSheet, Text, View, StatusBar } from "react-native";
+import { StyleSheet, Text, View, StatusBar } from "react-native";
 
 import firebase from "@react-native-firebase/app";
 

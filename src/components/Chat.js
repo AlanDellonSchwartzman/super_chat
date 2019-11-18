@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import {
-  StyleSheet,
-  View,
-  Button
+  StyleSheet
 } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import firebase from '@react-native-firebase/auth';
@@ -55,7 +53,6 @@ export default class Chat extends Component {
       });
 
       this.setState({
-        loading: false,
         messages: items
       });
     });

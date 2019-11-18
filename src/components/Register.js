@@ -24,7 +24,7 @@ export default class Register extends Component {
       password_confirmation: "",
     };
 
-    firebase().onAuthStateChanged(user => {
+    /*firebase().onAuthStateChanged(user => {
       if (user) {
         this.getRef()
           .child("friends")
@@ -35,7 +35,7 @@ export default class Register extends Component {
           });
         this.props.navigation.navigate("Main");
       }
-    });
+    });*/
   }
 
   getRef() {
@@ -57,27 +57,43 @@ export default class Register extends Component {
     console.log(name);
     console.log(password);
 
-    try {
-      const user = await firebase().createUserWithEmailAndPassword(email, password);
-      firebase().currentUser.updateProfile({
-        displayName: name,
-      });
 
-      firebase().onAuthStateChanged(user => {
-        if (user) {
-            this.props.navigation.navigate('Main');
+    if (this.state.email != "" && this.state.password != "" && this.state.name != ""){
+      try {
+        const user = await firebase().createUserWithEmailAndPassword(email, password);
+        firebase().currentUser.updateProfile({
+          displayName: name,
+        });
+
+        firebase().onAuthStateChanged(user => {
+          if (user) {
+              this.props.navigation.navigate('Main');
+          }
+        });
+
+        firebase().onAuthStateChanged(user => {
+          if (user) {
+            this.getRef()
+              .child("friends")
+              .push({
+                email: user.email,
+                uid: user.uid,
+                name: this.state.name
+              });
+            this.props.navigation.navigate("Main");
+          }
+        });
+
+      } catch (e) {
+        if (e.message.includes("invalid-email")){
+          alert("Digite um e-mail válido!")
         }
-      });
-
-    } catch (e) {
-      if (e.message.includes("invalid-email")){
-        alert("Digite um e-mail válido!")
+        else if (e.message.includes("email-already-in-use")){
+          alert("E-mail já está em uso!")
+        }
+        else console.error(e.message);
       }
-      else if (e.message.includes("email-already-in-use")){
-        alert("E-mail já está em uso!")
-      }
-      else console.error(e.message);
-    }    
+    } else (alert("Informe todos os dados necessário para cadastro!"))
   }
 
   render() {
